@@ -36,6 +36,15 @@ void State::reset()
                 grid[row][col].reset();
 };
 
+bool State::free(const Location &loc)
+{
+    for(int ant=0;ant<(int)myAnts.size();ant++)
+        if(grid[loc.row][loc.col].isWater || loc == myAnts[ant] )
+	    return false;
+
+    return true;
+}
+
 //outputs move information to the engine
 void State::makeMove(const Location &loc, int direction)
 {
