@@ -6,6 +6,7 @@ using namespace std;
 Bot::Bot()
 {
     map<Location,Location> orders;
+    map<Location,Location> foodTargets;
 };
 
 //plays a single game of Ants.
@@ -26,6 +27,13 @@ void Bot::playGame()
     }
 };
 
+bool Bot::doMoveLocation(Location antLoc, Location destLoc) 
+{
+    int direction = state.getDirections(antLoc, destLoc);
+    if(doMoveDirection(antLoc, direction)) return true;
+    else return false;
+};
+
 bool Bot::doMoveDirection(const Location &l, int d)
 {
     Location nLoc = state.getLocation(l,d);
@@ -38,17 +46,34 @@ bool Bot::doMoveDirection(const Location &l, int d)
     }
     else
         return false;
+};
+
+// FUNCTOR FOR CUSTOM SORTING CHEE-HUU! :)
+
+bool Bot::shortest_dist_first(Route first, Route second)
+{
+    return (first.distance > second.distance);
 }
 
 void Bot::doTurn()
 {
     orders.clear();
-    for(int ant=0;ant<(int)state.myAnts.size();ant++)
-       for(int d=0;d<TDIRECTIONS;d++)
-          if(doMoveDirection(state.myAnts[ant],d)) break;
-}
+    foodTargets.clear();
+    list<Route> foodRoutes;
+    for(int ant=0; ant<(int)state.myAnts.size();ant++)
+    {
+    	foodRoutes.push_back(Route(state.myAnts[ant],state.food[ant],state.distance(state.myAnts[ant],state.food[ant])) );
+    }	
+    list<Route>::iterator it;
+    for(it=foodRoutes.begin();it!=foodRoutes.end();it++)
+    {
+    	    if(foodTargets.find(it->end) == foodTargets.end() && doMoveLocation(it->start,it->end))
+    	    foodTargets.insert( pair<Location,Location>(it->end,it->start) );
+    }
+};
 
 //makes the bots moves for the turn
+/*
 void Bot::makeMoves()
 {
     state.bug << "turn " << state.turn << ":" << endl;
@@ -71,6 +96,7 @@ void Bot::makeMoves()
 
     state.bug << "time taken: " << state.timer.getTime() << "ms" << endl << endl;
 };
+*/
 
 //finishes the turn
 void Bot::endTurn()

@@ -10,11 +10,14 @@
 #include <queue>
 #include <stack>
 #include <stdint.h>
+#include <map>
+#include <list>
 
 #include "Timer.h"
 #include "Bug.h"
 #include "Square.h"
 #include "Location.h"
+#include "Route.h"
 
 /*
     constants
@@ -58,6 +61,7 @@ struct State
     void makeMove(const Location &loc, int direction);
 
     double distance(const Location &loc1, const Location &loc2);
+    int getDirections(const Location &from, const Location &to);
     Location getLocation(const Location &startLoc, int direction);
 
     bool free(const Location &loc);

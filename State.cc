@@ -45,6 +45,19 @@ bool State::free(const Location &loc)
     return true;
 }
 
+int State::getDirections(const Location &from, const Location &to)
+{
+	if(from.row < to.row && from.col < to.col) return 2;
+	else if(from.row < to.row && from.col == to.col) return 2;
+	else if(from.row < to.row && from.col > to.col) return 2;
+	else if(from.row == to.row && from.col > to.col) return 3;
+	else if(from.row > to.row && from.col > to.col) return 0;
+	else if(from.row > to.row && from.col == to.col) return 0;
+	else if(from.row > to.row && from.col < to.col) return 0;
+	else if(from.row == to.row && from.col < to.col) return 1;
+}
+	
+
 //outputs move information to the engine
 void State::makeMove(const Location &loc, int direction)
 {
